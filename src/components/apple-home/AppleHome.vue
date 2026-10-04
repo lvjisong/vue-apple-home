@@ -66,8 +66,7 @@ export default {
   data() {
     return {
       // 是否显示路由传参测试区（正式上线改成 false）
-      isDemo: true,
-
+      isDemo: false,
       /**
        * Hero 横幅配置数组（按官网首页顺序）
        * 字段同 AppleHero props：title/subtitle/theme/image/imageMobile/fallbackBg/
@@ -263,7 +262,7 @@ export default {
       return this.$store.getters.cartCount;
     },
   },
-  
+
   methods: {
     /** 跳产品详情页（路径参数方式） */
     goProduct() {

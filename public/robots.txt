@@ -1,0 +1,12 @@
+# robots.txt —— 告诉搜索引擎哪些页面可以爬，哪些不可以
+# 位置：public/robots.txt，打包后会自动复制到 dist/robots.txt
+
+User-agent: *
+Allow: /
+
+# 后台/登录页不让搜索引擎爬
+Disallow: /login
+Disallow: /cart
+
+# sitemap 地址（TODO-SITEMAP上线后改成你的域名）
+# Sitemap: https://your-domain.com/sitemap.xml

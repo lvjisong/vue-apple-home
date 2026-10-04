@@ -16,7 +16,8 @@
     ></div>
     <div v-if="imageMobile" class="apple-hero__image-wrapper">
       <!-- 移动端背景图（alt 用产品标题，有利于图片搜索 SEO） -->
-      <img :src="imageMobile" :alt="`${title} 产品图`" />
+      <!-- loading="lazy"：原生懒加载，首屏视口外的图片滚动到附近才加载 -->
+      <img :src="imageMobile" :alt="`${title} 产品图`" loading="lazy" />
     </div>
 
     <!-- 顶部标题 -->
