@@ -154,8 +154,8 @@ export default {
 .apple-tile__btn {
   display: inline-flex;
   align-items: center;
-  font-size: 17px;
-  padding: 9px 20px;
+  font-size: 14px;
+  padding: 8px 20px;
   border-radius: 999px;
   transition: transform 120ms ease-out, background-color 150ms ease-out;
 }
