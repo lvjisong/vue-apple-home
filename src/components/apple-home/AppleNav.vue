@@ -806,20 +806,22 @@ export default {
     /**
      * 鼠标移入某个一级菜单：
      * 1. 立刻取消关闭计时（防止面板关掉）
-     * 2. 切换面板内容加 50ms 防抖：鼠标快速划过导航项时，只有最后停住的才真正切换，不闪烁
+     * 2. 立刻显示面板（触发 enter 动画）
+     * 3. 切换内容加 50ms 防抖：鼠标快速划过导航项时，只有最后停住的才真正切换内容，不闪烁
      */
     openMenu(index) {
       // 立刻清掉关闭计时器：鼠标移进来了，不要关
       clearTimeout(this.closeTimer);
       this.isClosing = false;
       this.panelMode = "nav";
-      // 防抖：50ms 内连续 hover 不同项，只切换最后一次
-      this.switchPanel(index);
-    },
-    // 面板切换防抖（50ms，人眼几乎感觉不到，但能防止快速划过闪烁）
-    switchPanel: debounce(function (index) {
-      this.activeIndex = index;
+      // 立刻显示面板，触发 transition enter 动画
       this.showPanel = true;
+      // 防抖：50ms 内连续 hover 不同项，只切换最后一次的内容
+      this.switchPanelContent(index);
+    },
+    // 面板内容切换防抖（50ms，只切换 activeIndex，不控制显隐）
+    switchPanelContent: debounce(function (index) {
+      this.activeIndex = index;
     }, 50),
     /** 鼠标移出导航栏：延迟 200ms 后先隐藏内容再收起面板，避免鼠标快速划过抖动 */
     scheduleClose() {
@@ -1119,13 +1121,22 @@ export default {
   color: #2997ff;
 }
 
-/* 面板：固定在导航下边缘，向下展开 / 向上收起 */
+/* ============================================================
+ * Vue Transition 动画 - PC 端下拉面板（flyout）
+ * ------------------------------------------------------------
+ * 模板里：<transition name="flyout">
+ * Vue 自动加的类，不用手动写在 DOM 里：
+ *   - 进入：先加 .flyout-enter-from + .flyout-enter-active，下一帧移除 from，动画开始
+ *   - 离开：先加 .flyout-leave-to + .flyout-leave-active，动画结束移除
+ * ============================================================ */
+/* 进入/离开动画持续时间 + 缩放原点（从上往下展开） */
 .flyout-enter-active,
 .flyout-leave-active {
   transition: transform 0.38s cubic-bezier(0.4, 0, 0.6, 1);
   transform-origin: top;
 }
-.flyout-enter,
+/* 进入前 / 离开后：高度为 0，看不见 */
+.flyout-enter-from,
 .flyout-leave-to {
   transform: scaleY(0);
 }
@@ -1139,12 +1150,18 @@ export default {
   transition-duration: 0s;
 }
 
-/* 幕布淡入 */
+/* ============================================================
+ * Vue Transition 动画 - 暗色幕布（curtain）
+ * ------------------------------------------------------------
+ * 模板里：<transition name="curtain">
+ * 作用：下拉面板打开时，整个页面变暗（毛玻璃背景）
+ * 动画：淡入淡出（opacity）
+ * ============================================================ */
 .curtain-enter-active,
 .curtain-leave-active {
   transition: opacity 0.32s ease;
 }
-.curtain-enter,
+.curtain-enter-from,
 .curtain-leave-to {
   opacity: 0;
 }
@@ -1252,12 +1269,19 @@ export default {
     margin-left: 0;
   }
 }
+/* ============================================================
+ * Vue Transition 动画 - 移动端全屏面板（mobile-fade）
+ * ------------------------------------------------------------
+ * 模板里：<transition name="mobile-fade">
+ * 作用：移动端汉堡菜单 / 购物袋全屏面板的展开收起动画
+ * 动画：从上往下展开（scaleY），和 PC 端 flyout 一样
+ * ============================================================ */
 .mobile-fade-enter-active,
 .mobile-fade-leave-active {
   transition: transform 0.38s cubic-bezier(0.4, 0, 0.6, 1);
   transform-origin: top;
 }
-.mobile-fade-enter,
+.mobile-fade-enter-from,
 .mobile-fade-leave-to {
   transform: scaleY(0);
 }

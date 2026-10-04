@@ -497,15 +497,23 @@ export default {
     padding: 0 0 14px 12px;
     overflow: hidden;
   }
-  /* 展开动画：和 PC 下拉面板一致 scaleY 0.38s；收起无过渡 */
+  /* ============================================================
+   * Vue Transition 动画 - 移动端页脚展开（footer-expand）
+   * ------------------------------------------------------------
+   * 模板里：<transition name="footer-expand">
+   * 作用：移动端页脚点"显示更多"展开链接列表
+   * 动画：从上往下展开（scaleY），收起无动画（直接消失）
+   * ============================================================ */
   .footer-expand-enter-active {
     transition: transform 0.38s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.25s ease;
     transform-origin: top;
   }
-  .footer-expand-enter {
+  /* 进入前：高度为 0 + 透明 */
+  .footer-expand-enter-from {
     transform: scaleY(0);
     opacity: 0;
   }
+  /* 离开：无动画，直接消失 */
   .footer-expand-leave-active {
     transition: none;
   }

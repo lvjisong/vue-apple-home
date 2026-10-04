@@ -1187,12 +1187,18 @@ export default {
   color: #6e6e73;
 }
 
-/* ---- 进出场淡入 ---- */
+/* ============================================================
+ * Vue Transition 动画 - 文件上传弹窗（upload-fade）
+ * ------------------------------------------------------------
+ * 模板里：<transition name="upload-fade">
+ * 作用：文件上传弹窗的淡入淡出
+ * 动画：opacity 渐变
+ * ============================================================ */
 .upload-fade-enter-active,
 .upload-fade-leave-active {
   transition: opacity 180ms ease;
 }
-.upload-fade-enter,
+.upload-fade-enter-from,
 .upload-fade-leave-to {
   opacity: 0;
 }
