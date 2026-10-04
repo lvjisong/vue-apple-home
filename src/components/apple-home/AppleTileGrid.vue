@@ -151,29 +151,14 @@ export default {
   gap: 16px;
   justify-content: center;
 }
-.apple-tile__btn {
-  display: inline-flex;
-  align-items: center;
-  font-size: 14px;
-  padding: 8px 20px;
-  border-radius: 999px;
-  transition: transform 120ms ease-out, background-color 150ms ease-out;
-}
+/* 引入全局_mixins.scss 中的按钮样式 */
 .apple-tile__btn--primary {
-  background: #0071e3;
-  color: #fff;
+  @include btn-primary;
 }
 .apple-tile__btn--outline {
-  border: 1px solid #0071e3;
-  color: #0071e3;
+  @include btn-outline;
 }
-.apple-tile__btn--outline:hover {
-  background: #0071e3;
-  color: #fff;
-}
-.apple-tile__btn:active {
-  transform: scale(0.97);
-}
+
 @media (max-width: $breakpoint-mobile) {
   .apple-tiles {
     grid-template-columns: 1fr;

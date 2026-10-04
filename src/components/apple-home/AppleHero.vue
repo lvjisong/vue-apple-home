@@ -117,6 +117,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* ============================================================
+ * AppleHero 组件样式
+ * ------------------------------------------------------------
+ * 分类：
+ *   1. Hero 容器布局（全屏宽度 + 最小高度）
+ *   2. 背景图（PC 端 CSS 背景 / 移动端 img 标签）
+ *   3. 文字内容区（标题 / 副标题 / 按钮）
+ *   4. 响应式媒体查询（移动端高度调整）
+ * ============================================================ */
+
+/* ======== 1. Hero 容器布局 ======== */
 .apple-hero {
   position: relative;
   width: 100%;
@@ -135,6 +146,8 @@ export default {
 .apple-hero--dark {
   color: #f5f5f7;
 }
+
+/* ======== 2. 背景图（PC 端 CSS 背景） ======== */
 .apple-hero__bg {
   position: absolute;
   left: 0;
@@ -147,6 +160,8 @@ export default {
   will-change: transform;
   z-index: 0;
 }
+
+/* ======== 3. 文字内容区（标题 / 副标题 / 按钮） ======== */
 .apple-hero__top {
   padding: 56px 22px 0;
   position: relative;
@@ -187,6 +202,7 @@ export default {
   gap: 18px;
   justify-content: center;
 }
+/* 引入全局_mixins.scss 中的按钮样式 */
 .apple-hero__btn--primary {
   @include btn-primary;
 }
@@ -210,6 +226,7 @@ export default {
   display: none;
 }
 
+/* ======== 4. 响应式媒体查询（移动端 ≤734px） ======== */
 @media (max-width: $breakpoint-mobile) {
   .apple-hero {
     height: 500px;

@@ -922,6 +922,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/* ============================================================
+ * AppleNav 组件样式
+ * ------------------------------------------------------------
+ * 分类：
+ *   1. 导航条基础样式（fixed 定位 + 毛玻璃背景）
+ *   2. 顶部导航菜单项（Logo / 菜单链接 / 搜索 / 购物袋）
+ *   3. PC 端下拉面板（flyout）
+ *   4. 移动端汉堡菜单按钮
+ *   5. 移动端全屏面板
+ *   6. Vue Transition 动画
+ *   7. 响应式媒体查询（PC / 移动端切换）
+ * ============================================================ */
+
+/* ======== 1. 导航条基础样式 ======== */
 .apple-nav {
   position: fixed;
   top: 0;
@@ -935,11 +949,12 @@ export default {
   color: rgba(255, 255, 255, 0.8);
   font-family: $font-stack-text;
 }
-/* 展开时导航条本体变为不透明深色 */
+/* 展开下拉面板时，导航条本体变为不透明深色 */
 .apple-nav.is-open {
   background: #161617;
 }
 
+/* ======== 2. 顶部导航菜单项（Logo / 菜单链接 / 搜索 / 购物袋） ======== */
 .apple-nav__inner {
   max-width: $content-max-width;
   height: 44px;
@@ -1029,6 +1044,7 @@ export default {
 }
 
 /* 下拉面板 #161617 */
+/* ======== 3. PC 端下拉面板（flyout） ======== */
 .apple-nav__flyout {
   position: fixed;
   top: 44px;
@@ -1166,7 +1182,7 @@ export default {
   opacity: 0;
 }
 
-/* 移动端 */
+/* ======== 4. 移动端汉堡菜单按钮（默认隐藏，媒体查询里显示） ======== */
 .apple-nav__hamburger {
   display: none;
   background: none;
@@ -1181,10 +1197,19 @@ export default {
   background: #f5f5f7;
   margin: 4px 0;
 }
+/* ======== 5. 移动端全屏面板（默认隐藏，媒体查询里显示） ======== */
 .apple-nav__mobile {
   display: none;
 }
 
+/* ============================================================
+ * 7. 响应式媒体查询：移动端（≤734px）
+ * ------------------------------------------------------------
+ * 切换内容：
+ *   - 隐藏 PC 端导航菜单
+ *   - 显示汉堡菜单按钮
+ *   - 显示移动端全屏面板
+ * ============================================================ */
 @media (max-width: $breakpoint-mobile) {
   .apple-nav__menu {
     display: none;
