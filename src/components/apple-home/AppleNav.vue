@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <!-- Vue 3 多根节点：不需要外层 div 包裹，直接三个根节点 -->
   <!-- 展开下拉时的暗色毛玻璃幕布（置于 header 外，backdrop-filter 才能模糊页面） -->
@@ -5,7 +6,7 @@
   <transition name="curtain">
     <div v-show="showPanel" class="apple-nav__curtain" @click="closeOverlay"></div>
   </transition>
-  
+
   <!-- PC端导航栏与下拉面板 -->
   <header
     class="apple-nav"
@@ -945,6 +946,10 @@ export default {
     /**
      * PC 端滚动收起面板：
      * 面板打开后，页面往上滚动超过 30px 就自动收起
+     * 收起动画和鼠标离开 hover 区完全一致：
+     *   1. 先设置 isClosing = true（内容先消失）
+     *   2. requestAnimationFrame 等下一帧，让浏览器先渲染完
+     *   3. 再设置 showPanel = false，触发面板 scaleY 向上收起动画
      */
     handleScroll() {
       // 面板没开就不管
@@ -954,7 +959,13 @@ export default {
       if (isMobile) return;
       // 滚动距离超过 30px 就收起
       if (Math.abs(window.scrollY - this.scrollYOnOpen) > 30) {
-        this.closeOverlay();
+        // 先标记正在关闭，内容立刻消失（和鼠标离开一样）
+        this.isClosing = true;
+        // 等下一帧再隐藏面板，确保 transition 动画能正常触发
+        // 否则滚动时浏览器正在重绘，会跳过动画起始帧，面板瞬间消失
+        requestAnimationFrame(() => {
+          this.showPanel = false;
+        });
       }
     },
   },
