@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-multiple-template-root -->
 <template>
   <!--
     ErrorBoundary.vue —— 错误边界组件
@@ -12,19 +13,15 @@
     原理：Vue 3 用 onErrorCaptured() 钩子捕获子组件的错误，
          捕获到后切换到错误 UI，而不是让错误冒泡到整个应用。
   -->
-  <div v-if="hasError">
+  <div v-if="hasError" class="error-boundary">
     <!-- 出错了显示这个 -->
-    <div class="error-boundary">
-      <h2>页面出了点问题</h2>
-      <p>抱歉，这个模块加载失败了，请刷新页面试试。</p>
-      <button @click="handleRefresh">刷新页面</button>
-      <button @click="handleReset">返回上一页</button>
-    </div>
+    <h2>页面出了点问题</h2>
+    <p>抱歉，这个模块加载失败了，请刷新页面试试。</p>
+    <button @click="handleRefresh">刷新页面</button>
+    <button @click="handleReset">返回上一页</button>
   </div>
-  <div v-else>
-    <!-- 正常情况：渲染插槽里的内容 -->
-    <slot />
-  </div>
+  <!-- 正常情况：渲染插槽里的内容 -->
+  <slot v-else />
 </template>
 
 <script>

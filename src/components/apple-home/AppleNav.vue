@@ -1,349 +1,350 @@
 <template>
-  <div class="apple-nav-root">
-    <!-- 展开下拉时的暗色毛玻璃幕布（置于 header 外，backdrop-filter 才能模糊页面） -->
-    <!-- hover 导航下拉 / PC 购物袋下拉 共用；点击幕布收起 -->
-    <transition name="curtain">
-      <div v-show="showPanel" class="apple-nav__curtain" @click="closeOverlay"></div>
-    </transition>
+  <!-- Vue 3 多根节点：不需要外层 div 包裹，直接三个根节点 -->
+  <!-- 展开下拉时的暗色毛玻璃幕布（置于 header 外，backdrop-filter 才能模糊页面） -->
+  <!-- hover 导航下拉 / PC 购物袋下拉 共用；点击幕布收起 -->
+  <transition name="curtain">
+    <div v-show="showPanel" class="apple-nav__curtain" @click="closeOverlay"></div>
+  </transition>
+  
+  <!-- PC端导航栏与下拉面板 -->
+  <header
+    class="apple-nav"
+    :class="{
+      'is-open': showPanel && !isClosing,
+      'is-closing': isClosing,
+    }"
+    @mouseleave="scheduleClose"
+  >
+    <!-- PC端导航栏 -->
+    <div class="apple-nav__inner">
+      <!-- Apple Logo（官网 SVG）：hover 时收起下拉面板 -->
+      <a
+        class="apple-nav__logo"
+        :href="APPLE_URL"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Apple"
+        @mouseenter="scheduleClose"
+      >
+        <svg height="44" viewBox="0 0 14 44" width="14" aria-hidden="true">
+          <path :d="ICONS.apple" />
+        </svg>
+      </a>
 
-    <header
-      class="apple-nav"
-      :class="{
-        'is-open': showPanel && !isClosing,
-        'is-closing': isClosing,
-      }"
-      @mouseleave="scheduleClose"
-    >
-      <div class="apple-nav__inner">
-        <!-- Apple Logo（官网 SVG）：hover 时收起下拉面板 -->
-        <a
-          class="apple-nav__logo"
-          :href="APPLE_URL"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Apple"
-          @mouseenter="scheduleClose"
+      <nav class="apple-nav__menu">
+        <div
+          v-for="(item, index) in menus"
+          :key="item.label"
+          class="apple-nav__item"
+          @mouseenter="openMenu(index)"
         >
-          <svg height="44" viewBox="0 0 14 44" width="14" aria-hidden="true">
-            <path :d="ICONS.apple" />
-          </svg>
-        </a>
-
-        <nav class="apple-nav__menu">
-          <div
-            v-for="(item, index) in menus"
-            :key="item.label"
-            class="apple-nav__item"
-            @mouseenter="openMenu(index)"
-          >
-            <a
-              class="apple-nav__link"
-              :href="topLink(item.label)"
-              target="_blank"
-              rel="noopener noreferrer"
-              >{{ item.label }}</a
-            >
-          </div>
-        </nav>
-
-        <div class="apple-nav__actions">
           <a
-            class="apple-nav__icon"
-            :href="SEARCH_URL"
+            class="apple-nav__link"
+            :href="topLink(item.label)"
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="搜索"
-            @mouseenter="scheduleClose"
+            >{{ item.label }}</a
           >
-            <svg height="44" viewBox="0 0 15 44" width="15" aria-hidden="true">
-              <path :d="ICONS.search" />
-            </svg>
-          </a>
-          <button
-            class="apple-nav__icon"
-            aria-label="购物袋"
-            @click="toggleCart"
-            @mouseenter="onCartIconHover"
-          >
-            <svg height="44" viewBox="0 0 14 44" width="14" aria-hidden="true">
-              <path :d="ICONS.bag" />
-            </svg>
-          </button>
-          <button class="apple-nav__hamburger" @click="onHamburgerClick" aria-label="菜单">
-            <span></span><span></span>
-          </button>
         </div>
-      </div>
+      </nav>
 
-      <!-- PC端下拉面板（hover 导航 / 购物袋共用，按 panelMode 切换内容） -->
-      <transition name="flyout" @after-leave="afterLeave">
-        <div
-          v-show="showPanel"
-          class="apple-nav__flyout"
-          :class="{ 'apple-nav__flyout--cart': panelMode === 'cart' }"
-          @mouseenter="cancelClose"
-          @mouseleave="scheduleClose"
+      <div class="apple-nav__actions">
+        <a
+          class="apple-nav__icon"
+          :href="SEARCH_URL"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="搜索"
+          @mouseenter="scheduleClose"
         >
-          <!-- 导航下拉内容 -->
-          <div v-if="panelMode === 'nav'" class="apple-nav__flyout-inner">
-            <div v-for="(col, gi) in dropColumns" :key="col.heading" class="apple-nav__col">
-              <p class="apple-nav__col-head" :style="stagger(0, gi)">
-                {{ col.heading }}
-              </p>
-              <!-- 第一列：28px 大链接 -->
-              <template v-if="gi === 0">
-                <a
-                  v-for="(link, li) in col.links"
-                  :key="link"
-                  class="apple-nav__biglink"
-                  :style="stagger(li, gi)"
-                  :href="linkUrl(link)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >{{ link }}</a
-                >
-              </template>
-              <!-- 第二三列：中号链接 -->
-              <template v-else>
-                <a
-                  v-for="(link, li) in col.links"
-                  :key="link"
-                  class="apple-nav__midlink"
-                  :style="stagger(li, gi)"
-                  :href="linkUrl(link)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >{{ link }}</a
-                >
-              </template>
+          <svg height="44" viewBox="0 0 15 44" width="15" aria-hidden="true">
+            <path :d="ICONS.search" />
+          </svg>
+        </a>
+        <button
+          class="apple-nav__icon"
+          aria-label="购物袋"
+          @click="toggleCart"
+          @mouseenter="onCartIconHover"
+        >
+          <svg height="44" viewBox="0 0 14 44" width="14" aria-hidden="true">
+            <path :d="ICONS.bag" />
+          </svg>
+        </button>
+        <button class="apple-nav__hamburger" @click="onHamburgerClick" aria-label="菜单">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PC端下拉面板（hover 导航 / 购物袋共用，按 panelMode 切换内容） -->
+    <transition name="flyout" @after-leave="afterLeave">
+      <div
+        v-show="showPanel"
+        class="apple-nav__flyout"
+        :class="{ 'apple-nav__flyout--cart': panelMode === 'cart' }"
+        @mouseenter="cancelClose"
+        @mouseleave="scheduleClose"
+      >
+        <!-- 导航下拉内容 -->
+        <div v-if="panelMode === 'nav'" class="apple-nav__flyout-inner">
+          <div v-for="(col, gi) in dropColumns" :key="col.heading" class="apple-nav__col">
+            <p class="apple-nav__col-head" :style="stagger(0, gi)">
+              {{ col.heading }}
+            </p>
+            <!-- 第一列：28px 大链接 -->
+            <template v-if="gi === 0">
               <a
-                v-for="(link, fi) in col.footLinks || []"
-                :key="'f-' + link"
-                class="apple-nav__footlink"
-                :style="stagger(col.links.length + fi, gi)"
+                v-for="(link, li) in col.links"
+                :key="link"
+                class="apple-nav__biglink"
+                :style="stagger(li, gi)"
                 :href="linkUrl(link)"
                 target="_blank"
                 rel="noopener noreferrer"
                 >{{ link }}</a
               >
-            </div>
-          </div>
-
-          <!-- 购物袋内容 -->
-          <div v-else class="apple-nav__cart">
-            <p class="apple-nav__cart-title">{{ cartMenu.title }}</p>
-            <p class="apple-nav__cart-sub">
-              <a :href="cartMenu.sub.linkUrl" target="_blank" rel="noopener noreferrer">{{
-                cartMenu.sub.linkText
-              }}</a
-              >{{ cartMenu.sub.text }}
-            </p>
-            <p class="apple-nav__cart-heading">{{ cartMenu.heading }}</p>
+            </template>
+            <!-- 第二三列：中号链接 -->
+            <template v-else>
+              <a
+                v-for="(link, li) in col.links"
+                :key="link"
+                class="apple-nav__midlink"
+                :style="stagger(li, gi)"
+                :href="linkUrl(link)"
+                target="_blank"
+                rel="noopener noreferrer"
+                >{{ link }}</a
+              >
+            </template>
             <a
-              v-for="link in cartMenu.links"
-              :key="link.label"
-              class="apple-nav__cart-link"
-              :href="link.url"
+              v-for="(link, fi) in col.footLinks || []"
+              :key="'f-' + link"
+              class="apple-nav__footlink"
+              :style="stagger(col.links.length + fi, gi)"
+              :href="linkUrl(link)"
               target="_blank"
               rel="noopener noreferrer"
-              @click="showPanel = false"
+              >{{ link }}</a
             >
-              <svg
-                v-if="link.icon === 'order'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path :d="ICONS.box" />
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                <line x1="12" y1="22.08" x2="12" y2="12" />
-              </svg>
-              <svg
-                v-else-if="link.icon === 'favorites'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path :d="ICONS.home" />
-              </svg>
-              <svg
-                v-else-if="link.icon === 'account'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path :d="ICONS.settings" />
-              </svg>
-              <svg
-                v-else-if="link.icon === 'login'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path :d="ICONS.user" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              {{ link.label }}
-            </a>
           </div>
         </div>
-      </transition>
-    </header>
 
-    <!-- 移动端全屏面板（root 级，汉堡菜单 / 购物袋共用，按 mobileMode 切换内容） -->
-    <transition name="mobile-fade">
-      <div
-        v-show="mobileOpen"
-        class="apple-nav__mobile"
-        :class="{
-          'is-closing': mobileClosing,
-          'apple-nav__mobile--cart': mobileMode === 'cart',
-        }"
-      >
-        <!-- ===== 购物袋内容 ===== -->
-        <template v-if="mobileMode === 'cart'">
+        <!-- 购物袋内容 -->
+        <div v-else class="apple-nav__cart">
+          <p class="apple-nav__cart-title">{{ cartMenu.title }}</p>
+          <p class="apple-nav__cart-sub">
+            <a :href="cartMenu.sub.linkUrl" target="_blank" rel="noopener noreferrer">{{
+              cartMenu.sub.linkText
+            }}</a
+            >{{ cartMenu.sub.text }}
+          </p>
+          <p class="apple-nav__cart-heading">{{ cartMenu.heading }}</p>
+          <a
+            v-for="link in cartMenu.links"
+            :key="link.label"
+            class="apple-nav__cart-link"
+            :href="link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="showPanel = false"
+          >
+            <svg
+              v-if="link.icon === 'order'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path :d="ICONS.box" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            <svg
+              v-else-if="link.icon === 'favorites'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path :d="ICONS.home" />
+            </svg>
+            <svg
+              v-else-if="link.icon === 'account'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path :d="ICONS.settings" />
+            </svg>
+            <svg
+              v-else-if="link.icon === 'login'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path :d="ICONS.user" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            {{ link.label }}
+          </a>
+        </div>
+      </div>
+    </transition>
+  </header>
+
+  <!-- 移动端全屏面板（root 级，汉堡菜单 / 购物袋共用，按 mobileMode 切换内容） -->
+  <transition name="mobile-fade">
+    <div
+      v-show="mobileOpen"
+      class="apple-nav__mobile"
+      :class="{
+        'is-closing': mobileClosing,
+        'apple-nav__mobile--cart': mobileMode === 'cart',
+      }"
+    >
+      <!-- ===== 购物袋内容 ===== -->
+      <template v-if="mobileMode === 'cart'">
+        <button class="apple-nav__mobile-close" @click="closeMobile" aria-label="关闭">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+            <path :d="ICONS.close" />
+          </svg>
+        </button>
+        <div class="apple-nav__cart-mobile">
+          <p class="apple-nav__cart-title">{{ cartMenu.title }}</p>
+          <p class="apple-nav__cart-sub">
+            <a :href="cartMenu.sub.linkUrl" target="_blank" rel="noopener noreferrer">{{
+              cartMenu.sub.linkText
+            }}</a
+            >{{ cartMenu.sub.text }}
+          </p>
+          <p class="apple-nav__cart-heading">{{ cartMenu.heading }}</p>
+          <a
+            v-for="link in cartMenu.links"
+            :key="link.label"
+            class="apple-nav__cart-link"
+            :href="link.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            @click="mobileOpen = false"
+          >
+            <svg
+              v-if="link.icon === 'order'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path :d="ICONS.box" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            <svg
+              v-else-if="link.icon === 'favorites'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path :d="ICONS.home" />
+            </svg>
+            <svg
+              v-else-if="link.icon === 'account'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path :d="ICONS.settings" />
+            </svg>
+            <svg
+              v-else-if="link.icon === 'login'"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+            >
+              <path :d="ICONS.user" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            {{ link.label }}
+          </a>
+        </div>
+      </template>
+
+      <!-- ===== 汉堡导航内容 ===== -->
+      <template v-else>
+        <template v-if="mobileIndex === -1">
           <button class="apple-nav__mobile-close" @click="closeMobile" aria-label="关闭">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
               <path :d="ICONS.close" />
             </svg>
           </button>
-          <div class="apple-nav__cart-mobile">
-            <p class="apple-nav__cart-title">{{ cartMenu.title }}</p>
-            <p class="apple-nav__cart-sub">
-              <a :href="cartMenu.sub.linkUrl" target="_blank" rel="noopener noreferrer">{{
-                cartMenu.sub.linkText
-              }}</a
-              >{{ cartMenu.sub.text }}
-            </p>
-            <p class="apple-nav__cart-heading">{{ cartMenu.heading }}</p>
+          <nav class="apple-nav__mobile-list">
             <a
-              v-for="link in cartMenu.links"
-              :key="link.label"
-              class="apple-nav__cart-link"
-              :href="link.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              @click="mobileOpen = false"
+              v-for="(item, index) in menus"
+              :key="item.label"
+              class="apple-nav__mobile-top"
+              @click="mobileIndex = index"
+              >{{ item.label }}</a
             >
-              <svg
-                v-if="link.icon === 'order'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path :d="ICONS.box" />
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                <line x1="12" y1="22.08" x2="12" y2="12" />
-              </svg>
-              <svg
-                v-else-if="link.icon === 'favorites'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path :d="ICONS.home" />
-              </svg>
-              <svg
-                v-else-if="link.icon === 'account'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path :d="ICONS.settings" />
-              </svg>
-              <svg
-                v-else-if="link.icon === 'login'"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.8"
-              >
-                <path :d="ICONS.user" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              {{ link.label }}
-            </a>
-          </div>
+          </nav>
         </template>
-
-        <!-- ===== 汉堡导航内容 ===== -->
         <template v-else>
-          <template v-if="mobileIndex === -1">
-            <button class="apple-nav__mobile-close" @click="closeMobile" aria-label="关闭">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
-                <path :d="ICONS.close" />
-              </svg>
-            </button>
-            <nav class="apple-nav__mobile-list">
+          <button class="apple-nav__mobile-back" @click="mobileIndex = -1" aria-label="返回">
+            <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor">
+              <path :d="ICONS.back" />
+            </svg>
+          </button>
+          <button class="apple-nav__mobile-close" @click="closeMobile" aria-label="关闭">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
+              <path :d="ICONS.close" />
+            </svg>
+          </button>
+          <nav class="apple-nav__mobile-sub">
+            <template v-for="(col, ci) in menus[mobileIndex].columns">
+              <p v-if="ci === 0" :key="'h-' + ci" class="apple-nav__mobile-heading">
+                {{ col.heading }}
+              </p>
               <a
-                v-for="(item, index) in menus"
-                :key="item.label"
-                class="apple-nav__mobile-top"
-                @click="mobileIndex = index"
-                >{{ item.label }}</a
+                v-for="l in col.links"
+                :key="l"
+                :href="topLink(l)"
+                target="_blank"
+                rel="noopener noreferrer"
+                @click="mobileOpen = false"
+                >{{ l }}</a
               >
-            </nav>
-          </template>
-          <template v-else>
-            <button class="apple-nav__mobile-back" @click="mobileIndex = -1" aria-label="返回">
-              <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor">
-                <path :d="ICONS.back" />
-              </svg>
-            </button>
-            <button class="apple-nav__mobile-close" @click="closeMobile" aria-label="关闭">
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
-                <path :d="ICONS.close" />
-              </svg>
-            </button>
-            <nav class="apple-nav__mobile-sub">
-              <template v-for="(col, ci) in menus[mobileIndex].columns">
-                <p v-if="ci === 0" :key="'h-' + ci" class="apple-nav__mobile-heading">
-                  {{ col.heading }}
-                </p>
-                <a
-                  v-for="l in col.links"
-                  :key="l"
-                  :href="topLink(l)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  @click="mobileOpen = false"
-                  >{{ l }}</a
-                >
-                <p v-if="ci > 0" :key="'h-' + ci" class="apple-nav__mobile-heading">
-                  {{ col.heading }}
-                </p>
-              </template>
-            </nav>
-          </template>
+              <p v-if="ci > 0" :key="'h-' + ci" class="apple-nav__mobile-heading">
+                {{ col.heading }}
+              </p>
+            </template>
+          </nav>
         </template>
-      </div>
-    </transition>
-  </div>
+      </template>
+    </div>
+  </transition>
 </template>
 
 <script>
