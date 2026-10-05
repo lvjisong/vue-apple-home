@@ -407,6 +407,9 @@ export default {
       mobileIndex: -1, // 汉堡二级分类下标，-1 表示一级列表（仅 menu 模式用）
       mobileClosing: false, // 面板关闭动画中
 
+      // ===== PC 端滚动收起面板用 =====
+      scrollYOnOpen: 0, // 面板打开时的页面滚动位置
+
       // ===== 共享 =====
       closeTimer: null, // 鼠标移出后延迟关闭面板的 setTimeout 句柄
 
@@ -751,6 +754,31 @@ export default {
       ],
     };
   },
+  watch: {
+    /**
+     * 移动端面板打开/关闭时，锁定/恢复 body 滚动
+     * 打开面板时 body 加 overflow: hidden，防止背景页面滚动
+     * 关闭时恢复原来的 overflow
+     */
+    mobileOpen(val) {
+      if (val) {
+        // 面板打开：锁定 body 滚动
+        document.body.style.overflow = "hidden";
+      } else {
+        // 面板关闭：恢复 body 滚动
+        document.body.style.overflow = "";
+      }
+    },
+    /**
+     * PC 端面板打开时，记录当前滚动位置
+     * 后面滚动超过 30px 就自动收起
+     */
+    showPanel(val) {
+      if (val) {
+        this.scrollYOnOpen = window.scrollY;
+      }
+    },
+  },
   computed: {
     dropColumns() {
       const item = this.menus[this.activeIndex];
@@ -913,10 +941,33 @@ export default {
         this.showPanel = false;
       }
     },
+    /**
+     * PC 端滚动收起面板：
+     * 面板打开后，页面往上滚动超过 30px 就自动收起
+     */
+    handleScroll() {
+      // 面板没开就不管
+      if (!this.showPanel) return;
+      // 移动端不管
+      const isMobile = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+      if (isMobile) return;
+      // 滚动距离超过 30px 就收起
+      if (Math.abs(window.scrollY - this.scrollYOnOpen) > 30) {
+        this.closeOverlay();
+      }
+    },
+  },
+  mounted() {
+    // 绑定滚动事件：PC 端面板展开后，页面滚动就自动收起
+    window.addEventListener("scroll", this.handleScroll);
   },
   beforeDestroy() {
     // 组件销毁前清掉未执行的计时器，避免内存泄漏
     clearTimeout(this.closeTimer);
+    // 组件销毁前恢复 body 滚动，防止卸载后页面还锁着滚动
+    document.body.style.overflow = "";
+    // 解绑滚动事件
+    window.removeEventListener("scroll", this.handleScroll);
   },
 };
 </script>
