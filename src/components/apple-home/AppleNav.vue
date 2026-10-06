@@ -1061,7 +1061,7 @@ export default {
   color: rgba(255, 255, 255, 0.8);
   padding: 0 8px;
   white-space: nowrap;
-  transition: color 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: color 0.32s $ease-apple;
 }
 .apple-nav__link:hover {
   color: #fff;
@@ -1136,8 +1136,7 @@ export default {
   /* 错峰淡入 */
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple;
 }
 /* 展开态：全部淡入 */
 .apple-nav.is-open .apple-nav__col-head,
@@ -1157,11 +1156,10 @@ export default {
   margin-bottom: 10px;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1), color 0.2s;
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple, color 0.2s;
 }
 .apple-nav__biglink:hover {
-  color: #2997ff;
+  color: $apple-link;
 }
 /* 第二三列中号链接：17px / 600 */
 .apple-nav__midlink {
@@ -1173,15 +1171,14 @@ export default {
   margin-bottom: 6px;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1), color 0.2s;
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple, color 0.2s;
 }
 .apple-nav.is-open .apple-nav__midlink {
   opacity: 1;
   transform: translateY(0);
 }
 .apple-nav__midlink:hover {
-  color: #2997ff;
+  color: $apple-link;
 }
 /* 列底部小字链接（如 Mac 机型比较） */
 .apple-nav__footlink {
@@ -1193,11 +1190,10 @@ export default {
   margin-top: 14px;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1), color 0.2s;
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple, color 0.2s;
 }
 .apple-nav__footlink:hover {
-  color: #2997ff;
+  color: $apple-link;
 }
 
 /* ============================================================
@@ -1211,7 +1207,7 @@ export default {
 /* 进入/离开动画持续时间 + 缩放原点（从上往下展开） */
 .flyout-enter-active,
 .flyout-leave-active {
-  transition: transform 0.38s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: transform 0.38s $ease-apple;
   transform-origin: top;
 }
 /* 进入前 / 离开后：高度为 0，看不见 */
@@ -1366,7 +1362,7 @@ export default {
  * ============================================================ */
 .mobile-fade-enter-active,
 .mobile-fade-leave-active {
-  transition: transform 0.38s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: transform 0.38s $ease-apple;
   transform-origin: top;
 }
 .mobile-fade-enter-from,
@@ -1398,8 +1394,7 @@ export default {
   color: #f5f5f7;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple;
 }
 .apple-nav__cart-sub {
   margin: 0 0 32px;
@@ -1408,11 +1403,10 @@ export default {
   color: #86868b;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple;
 }
 .apple-nav__cart-sub a {
-  color: #2997ff;
+  color: $apple-link;
   text-decoration: none;
 }
 .apple-nav__cart-sub a:hover {
@@ -1425,8 +1419,7 @@ export default {
   color: #6e6e73;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1);
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple;
 }
 .apple-nav__cart-link {
   display: flex;
@@ -1440,15 +1433,14 @@ export default {
   text-decoration: none;
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.6, 1),
-    transform 0.32s cubic-bezier(0.4, 0, 0.6, 1), color 0.2s;
+  transition: opacity 0.32s $ease-apple, transform 0.32s $ease-apple, color 0.2s;
 }
 .apple-nav__cart-link svg {
   flex: none;
   color: #86868b;
 }
 .apple-nav__cart-link:hover {
-  color: #2997ff;
+  color: $apple-link;
 }
 /* 展开态：购物袋内容淡入（与导航下拉同一套 is-open 触发） */
 .apple-nav.is-open .apple-nav__cart-title,

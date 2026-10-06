@@ -505,7 +505,7 @@ export default {
    * 动画：从上往下展开（scaleY），收起无动画（直接消失）
    * ============================================================ */
   .footer-expand-enter-active {
-    transition: transform 0.38s cubic-bezier(0.4, 0, 0.6, 1), opacity 0.25s ease;
+    transition: transform 0.38s $ease-apple, opacity 0.25s ease;
     transform-origin: top;
   }
   /* 进入前：高度为 0 + 透明 */

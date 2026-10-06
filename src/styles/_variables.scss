@@ -32,3 +32,7 @@ $breakpoint-mobile: 734px;
 
 // ===== 内容区最大宽度（Nav / Footer 共用）=====
 $content-max-width: 1024px;
+
+// ===== 动画缓动函数（Apple 风格统一用这个）=====
+// 大部分展开收起动画都用这个曲线，改一处全局生效
+$ease-apple: cubic-bezier(0.4, 0, 0.6, 1);
