@@ -181,8 +181,6 @@ $font-stack: -apple-system, BlinkMacSystemFont, ...; // 字体栈
 
 ## 📝 Git 提交规范（husky + lint-staged）
 
-**VPN 开了以后跑这两行初始化：**
-
 ```bash
 npm install --save-dev husky lint-staged
 npx husky install
@@ -620,13 +618,13 @@ deep.b.c = 999; // obj.b.c 不变
 **Q: 深拷贝用在什么场景？**
 A: 只要你不想让改副本的时候影响到原数据，就用深拷贝：
 
-| 场景 | 为什么要深拷贝 |
-|---|---|
-| **表单编辑** | 编辑用户信息，点"取消"要还原成原来的样子 |
-| **改 Vuex state** | 不能直接改 state，拷贝一份改完再 commit |
-| **数组排序** | sort 会改原数组，拷贝一份再排序 |
-| **复制默认配置** | 改用户配置时不污染全局默认值 |
-| **传数据给子组件** | 防止子组件瞎改影响父组件 |
+| 场景               | 为什么要深拷贝                           |
+| ------------------ | ---------------------------------------- |
+| **表单编辑**       | 编辑用户信息，点"取消"要还原成原来的样子 |
+| **改 Vuex state**  | 不能直接改 state，拷贝一份改完再 commit  |
+| **数组排序**       | sort 会改原数组，拷贝一份再排序          |
+| **复制默认配置**   | 改用户配置时不污染全局默认值             |
+| **传数据给子组件** | 防止子组件瞎改影响父组件                 |
 
 ```js
 // 示例：编辑表单，取消要还原
@@ -643,11 +641,11 @@ handleCancel() {
 
 **深拷贝方法怎么选？**
 
-| 场景 | 用什么 |
-|---|---|
-| 现代浏览器（95% 用户） | `structuredClone()` |
-| 简单对象，没函数没 Date | `JSON.parse(JSON.stringify())` |
-| 复杂数据（有函数 / 循环引用） | `lodash.cloneDeep` |
+| 场景                          | 用什么                         |
+| ----------------------------- | ------------------------------ |
+| 现代浏览器（95% 用户）        | `structuredClone()`            |
+| 简单对象，没函数没 Date       | `JSON.parse(JSON.stringify())` |
+| 复杂数据（有函数 / 循环引用） | `lodash.cloneDeep`             |
 
 ---
 
@@ -675,25 +673,25 @@ A:
 
 **增删改（会改原数组）**
 
-| 方法 | 干什么 | 返回什么 |
-|---|---|---|
-| `push()` | 末尾加元素 | 新长度 |
-| `pop()` | 末尾删元素 | 被删的元素 |
-| `unshift()` | 开头加元素 | 新长度 |
-| `shift()` | 开头删元素 | 被删的元素 |
-| `splice(start, count, ...items)` | 任意位置增删改 | 被删的数组 |
-| `sort()` | 排序 | 原数组（改了顺序） |
-| `reverse()` | 反转 | 原数组（倒过来了） |
-| `fill(value)` | 全部填充成同一个值 | 原数组 |
+| 方法                             | 干什么             | 返回什么           |
+| -------------------------------- | ------------------ | ------------------ |
+| `push()`                         | 末尾加元素         | 新长度             |
+| `pop()`                          | 末尾删元素         | 被删的元素         |
+| `unshift()`                      | 开头加元素         | 新长度             |
+| `shift()`                        | 开头删元素         | 被删的元素         |
+| `splice(start, count, ...items)` | 任意位置增删改     | 被删的数组         |
+| `sort()`                         | 排序               | 原数组（改了顺序） |
+| `reverse()`                      | 反转               | 原数组（倒过来了） |
+| `fill(value)`                    | 全部填充成同一个值 | 原数组             |
 
 ```js
 const arr = [1, 2, 3];
 
-arr.push(4);        // [1, 2, 3, 4]
-arr.pop();          // [1, 2, 3]，返回 4
-arr.unshift(0);     // [0, 1, 2, 3]
-arr.shift();        // [1, 2, 3]，返回 0
-arr.splice(1, 1);   // [1, 3]，删掉第 2 个
+arr.push(4); // [1, 2, 3, 4]
+arr.pop(); // [1, 2, 3]，返回 4
+arr.unshift(0); // [0, 1, 2, 3]
+arr.shift(); // [1, 2, 3]，返回 0
+arr.splice(1, 1); // [1, 3]，删掉第 2 个
 arr.splice(1, 0, 2); // [1, 2, 3]，在第 2 个位置插入 2
 ```
 
@@ -701,36 +699,36 @@ arr.splice(1, 0, 2); // [1, 2, 3]，在第 2 个位置插入 2
 
 **查询（不改原数组）**
 
-| 方法 | 干什么 | 返回什么 |
-|---|---|---|
-| `indexOf(x)` | 找 x 的下标 | 下标（找不到 -1） |
-| `includes(x)` | 有没有 x | true / false |
-| `find(fn)` | 找第一个符合的元素 | 那个元素 / undefined |
-| `findIndex(fn)` | 找第一个符合的下标 | 下标 / -1 |
+| 方法            | 干什么             | 返回什么             |
+| --------------- | ------------------ | -------------------- |
+| `indexOf(x)`    | 找 x 的下标        | 下标（找不到 -1）    |
+| `includes(x)`   | 有没有 x           | true / false         |
+| `find(fn)`      | 找第一个符合的元素 | 那个元素 / undefined |
+| `findIndex(fn)` | 找第一个符合的下标 | 下标 / -1            |
 
 ```js
 const arr = [10, 20, 30, 40];
 
-arr.indexOf(30);     // 2
-arr.includes(50);    // false
-arr.find(x => x > 25); // 30
-arr.findIndex(x => x > 25); // 2
+arr.indexOf(30); // 2
+arr.includes(50); // false
+arr.find((x) => x > 25); // 30
+arr.findIndex((x) => x > 25); // 2
 ```
 
 ---
 
 **遍历 / 转换（不改原数组）**
 
-| 方法 | 干什么 | 返回什么 |
-|---|---|---|
-| `map(fn)` | 每个元素都改一遍 | 新数组 |
-| `filter(fn)` | 过滤符合条件的 | 新数组 |
-| `forEach(fn)` | 循环做事情 | 啥都不返回 |
-| `some(fn)` | 有没有符合的 | true / false |
-| `every(fn)` | 是不是全部符合 | true / false |
-| `reduce(fn, init)` | 累加 / 折叠 | 最终值 |
-| `flat(depth)` | 拍平嵌套数组 | 新数组 |
-| `flatMap(fn)` | map + flat 二合一 | 新数组 |
+| 方法               | 干什么            | 返回什么     |
+| ------------------ | ----------------- | ------------ |
+| `map(fn)`          | 每个元素都改一遍  | 新数组       |
+| `filter(fn)`       | 过滤符合条件的    | 新数组       |
+| `forEach(fn)`      | 循环做事情        | 啥都不返回   |
+| `some(fn)`         | 有没有符合的      | true / false |
+| `every(fn)`        | 是不是全部符合    | true / false |
+| `reduce(fn, init)` | 累加 / 折叠       | 最终值       |
+| `flat(depth)`      | 拍平嵌套数组      | 新数组       |
+| `flatMap(fn)`      | map + flat 二合一 | 新数组       |
 
 ```js
 // reduce 求和
@@ -739,25 +737,25 @@ const sum = nums.reduce((sum, x) => sum + x, 0); // 10
 
 // flat 拍平嵌套数组
 const nested = [1, [2, 3], [4, [5, 6]]];
-nested.flat();      // [1, 2, 3, 4, [5, 6]]（拍平一层）
-nested.flat(2);     // [1, 2, 3, 4, 5, 6]（拍平两层）
+nested.flat(); // [1, 2, 3, 4, [5, 6]]（拍平一层）
+nested.flat(2); // [1, 2, 3, 4, 5, 6]（拍平两层）
 ```
 
 ---
 
 **拼接 / 截取（不改原数组）**
 
-| 方法 | 干什么 | 返回什么 |
-|---|---|---|
-| `concat(arr2)` | 拼接两个数组 | 新数组 |
-| `slice(start, end)` | 截取一段 | 新数组 |
-| `join(separator)` | 数组转字符串 | 字符串 |
+| 方法                | 干什么       | 返回什么 |
+| ------------------- | ------------ | -------- |
+| `concat(arr2)`      | 拼接两个数组 | 新数组   |
+| `slice(start, end)` | 截取一段     | 新数组   |
+| `join(separator)`   | 数组转字符串 | 字符串   |
 
 ```js
 const a = [1, 2];
 const b = [3, 4];
 
-a.concat(b);       // [1, 2, 3, 4]
+a.concat(b); // [1, 2, 3, 4]
 [1, 2, 3, 4].slice(1, 3); // [2, 3]（从第 1 个到第 3 个之前）
 [1, 2, 3].join("-"); // "1-2-3"
 ```
@@ -766,15 +764,15 @@ a.concat(b);       // [1, 2, 3, 4]
 
 **其他常用**
 
-| 方法 | 干什么 |
-|---|---|
-| `Array.isArray(x)` | 判断是不是数组 |
-| `Array.from(xxx)` | 把类数组 / Set 转成真数组 |
-| `arr.at(-1)` | 取最后一个元素（负数从后数） |
+| 方法               | 干什么                       |
+| ------------------ | ---------------------------- |
+| `Array.isArray(x)` | 判断是不是数组               |
+| `Array.from(xxx)`  | 把类数组 / Set 转成真数组    |
+| `arr.at(-1)`       | 取最后一个元素（负数从后数） |
 
 ```js
-[1, 2, 3].at(-1);  // 3（最后一个）
-[1, 2, 3].at(-2);  // 2（倒数第二个）
+[1, 2, 3].at(-1); // 3（最后一个）
+[1, 2, 3].at(-2); // 2（倒数第二个）
 ```
 
 ---
@@ -872,6 +870,7 @@ console.log("4"); // 同步
 ```
 
 **为什么？**
+
 - 同步代码直接跑
 - 微任务（Promise.then / await）在同步代码后立刻跑
 - 宏任务（setTimeout / setInterval）要等下一轮事件循环
@@ -901,14 +900,15 @@ A: `.then` 后面必须跟 `.catch`，不然错误被吞了。
 
 ```js
 // ❌ 请求失败，控制台啥都没有
-api.getUser().then(data => {
+api.getUser().then((data) => {
   console.log(data);
 });
 
 // ✅ 加 catch
-api.getUser()
-  .then(data => console.log(data))
-  .catch(err => console.error("请求失败：", err));
+api
+  .getUser()
+  .then((data) => console.log(data))
+  .catch((err) => console.error("请求失败：", err));
 ```
 
 ---
@@ -939,12 +939,12 @@ async function loadData() {
 **Q: 内存泄漏怎么产生的？怎么排查？**
 A: 常见原因：
 
-| 原因 | 例子 | 怎么解决 |
-|---|---|---|
-| 定时器没清 | `setInterval` 忘了 `clearInterval` | `beforeUnmount` 里清掉 |
-| 事件监听没移除 | `window.addEventListener` 忘了 `removeEventListener` | `beforeUnmount` 里移除 |
-| 闭包持有大对象 | 闭包引用了大数组，GC 回收不了 | 不用的时候置 null |
-| 全局变量越积越多 | 随便往 window 上挂东西 | 少用全局变量 |
+| 原因             | 例子                                                 | 怎么解决               |
+| ---------------- | ---------------------------------------------------- | ---------------------- |
+| 定时器没清       | `setInterval` 忘了 `clearInterval`                   | `beforeUnmount` 里清掉 |
+| 事件监听没移除   | `window.addEventListener` 忘了 `removeEventListener` | `beforeUnmount` 里移除 |
+| 闭包持有大对象   | 闭包引用了大数组，GC 回收不了                        | 不用的时候置 null      |
+| 全局变量越积越多 | 随便往 window 上挂东西                               | 少用全局变量           |
 
 ```js
 // ✅ 正确写法
@@ -965,6 +965,7 @@ beforeUnmount() {
 A:
 
 - **重排**：元素位置 / 尺寸变了，浏览器要重新算布局（代价大）
+
   - 改 width / height / padding / margin / top / left
   - 新增 / 删除 DOM 元素
   - 改 font-size
@@ -973,6 +974,7 @@ A:
   - 改 color / background / border-color / visibility
 
 **优化建议**：
+
 - 不要频繁改样式，合并成一次改（用 class 切换）
 - 动画用 `transform` 和 `opacity`（不触发重排，走 GPU 加速）
 
@@ -998,6 +1000,7 @@ A: 不是所有跨域请求都直接发，"复杂请求"会先发一个 OPTIONS 
 - **复杂请求**（PUT / DELETE / 自定义 header / Content-Type: application/json）：先发 OPTIONS 问后端"允不允许"，允许了才发真正的请求
 
 **常见报错**：
+
 ```
 Access to fetch at 'xxx' from origin 'xxx' has been blocked by CORS policy
 ```
@@ -1009,14 +1012,15 @@ Access to fetch at 'xxx' from origin 'xxx' has been blocked by CORS policy
 **Q: HTTP 缓存：强缓存 vs 协商缓存？**
 A: 改了代码线上还是旧的？多半是缓存没配好。
 
-| 缓存类型 | 怎么触发 | 什么时候失效 |
-|---|---|---|
-| **强缓存** | `Cache-Control: max-age=31536000` | 一年内直接用本地缓存，不发请求 |
-| **协商缓存** | `ETag` / `Last-Modified` | 发请求问服务器"变了没"，没变就用本地 |
+| 缓存类型     | 怎么触发                          | 什么时候失效                         |
+| ------------ | --------------------------------- | ------------------------------------ |
+| **强缓存**   | `Cache-Control: max-age=31536000` | 一年内直接用本地缓存，不发请求       |
+| **协商缓存** | `ETag` / `Last-Modified`          | 发请求问服务器"变了没"，没变就用本地 |
 
 **项目里已经配好了**：带 hash 的 JS / CSS 缓存一年，文件名变了自动重新下载。
 
 **线上改了代码还是旧的？**
+
 - 强缓存太狠了？改 nginx 配置，缩短缓存时间
 - index.html 不要缓存（不然用户永远看到旧的入口）
 
