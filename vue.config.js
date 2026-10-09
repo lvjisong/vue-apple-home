@@ -14,8 +14,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const isProd = process.env.NODE_ENV === "production";
 // 是否打开打包分析（npm run build:report 触发）
-const report =
-  process.env.npm_config_report === "true" || process.env.ANALYZE === "true";
+const report = process.env.npm_config_report === "true" || process.env.ANALYZE === "true";
 
 module.exports = defineConfig({
   // 让 node_modules 里的依赖也经过 babel 转译（兼容老浏览器）
@@ -60,7 +59,7 @@ module.exports = defineConfig({
           algorithm: "gzip",
           compressionOptions: { level: 9 },
           deleteOriginalAssets: false, // 同时保留原文件兜底
-        }),
+        })
       );
     }
     // 打包体积分析面板（npm run build:report）

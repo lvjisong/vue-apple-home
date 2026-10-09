@@ -973,7 +973,7 @@ export default {
     // 绑定滚动事件：PC 端面板展开后，页面滚动就自动收起
     window.addEventListener("scroll", this.handleScroll);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // 组件销毁前清掉未执行的计时器，避免内存泄漏
     clearTimeout(this.closeTimer);
     // 组件销毁前恢复 body 滚动，防止卸载后页面还锁着滚动

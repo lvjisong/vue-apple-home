@@ -258,7 +258,7 @@ export default {
     this.CIRCUMFERENCE = 2 * Math.PI * this.RADIUS;
     this.smoothProgress = Math.max(0, Math.min(100, this.uploadState.progress));
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // 清理定时器，避免组件销毁后仍有回调
     clearTimeout(this.hideTimer);
     clearInterval(this.simTimer);
