@@ -9,7 +9,7 @@
     "build:staging": "vue-cli-service build --mode staging",
     "lint": "vue-cli-service lint",
     "format": "prettier --write \"src/**/*.{vue,js,scss,css}\"",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
@@ -32,7 +32,7 @@
     "eslint-config-prettier": "^8.10.2",
     "eslint-plugin-prettier": "^4.2.5",
     "eslint-plugin-vue": "^8.0.3",
-    "husky": "^9.1.7",
+    "husky": "^7.0.4",
     "lint-staged": "^17.6.0",
     "prettier": "^2.8.8",
     "sass": "^1.105.1",
