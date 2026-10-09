@@ -1,21 +1,17 @@
-/**
- * theme.scss —— 全局主题变量（跟随系统深浅色）
- *
- * 用法：
- *   1. 在 main.js 或 App.vue 里 @import 一次本文件
- *   2. 组件里直接用 var(--xxx)，例如 color: var(--text-secondary);
- *   3. 浏览器会根据系统 prefers-color-scheme 自动切换，无需 JS
- * 基于 variables 拼装出具体的主题外观 —— 按钮、卡片、表单、导航、暗色 / 亮色模式等组件级样式。它依赖 `_variables.scss` 里定义的变量，是 "设计语言的具体落地"。
- * 当前仅 AppleFooter 使用了本文件变量；其他组件如需深色模式，
- * 把硬编码颜色替换成对应变量即可，例如：
- *   #1d1d1f → var(--text-primary)
- *   #6e6e73 → var(--text-secondary)
- *   #f5f5f7 → var(--bg-page)
- *   #d2d2d7 → var(--border)
- *   #0071e3 → var(--link) （两色通用，不用改）
- *
- * 新增颜色时，先在 :root 定义浅色值，再在 dark 块里覆盖深色值。
- */
+// ============================================================
+// theme.scss —— 主题层（深浅色模式，编译进 CSS）
+// ------------------------------------------------------------
+// 基于 CSS 变量定义主题外观（亮色/暗色模式），被 main.js 引入。
+// 依赖 _variables.scss 的设计令牌，是"设计语言的具体落地"。
+// 组件里用 var(--xxx)，浏览器按 prefers-color-scheme 自动切换。
+// 当前仅 AppleFooter 使用了本文件变量；其他组件如需深色模式，
+// 把硬编码颜色替换成对应变量即可，例如：
+//   #1d1d1f → var(--text-primary)
+//   #6e6e73 → var(--text-secondary)
+//   #f5f5f7 → var(--bg-page)
+//   #d2d2d7 → var(--border)
+//   #0071e3 → var(--link) （两色通用，不用改）
+// ============================================================
 
 :root {
   /* 背景 */
