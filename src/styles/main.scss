@@ -4,6 +4,7 @@
 // 顺序：变量/mixins 先（已在 vue.config.js additionalData 里自动注入，
 //       这里再 @use 一次保证本文件内可用），最后 reset 兜底。
 // 组件里直接用 $xxx / @include xxx()，无需自己 @use。
+// 只负责 `@use` / `@import` 把上面四个 partial 文件按顺序组装起来。它是最终被编译成 `main.css` 的那个文件，顺序通常是：variables → mixins → reset → theme。
 // ============================================================
 @use "variables" as *;
 @use "mixins" as *;

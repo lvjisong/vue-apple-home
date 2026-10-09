@@ -1,3 +1,5 @@
+// **浏览器样式重置**。抹平不同浏览器的默认样式差异（margin、padding、列表符号、标题字号等），让页面在各浏览器下渲染起点一致。常见做法是引用 normalize.css 或手写 reset。
+
 @use "variables" as *;
 
 * {

@@ -5,7 +5,7 @@
  *   1. 在 main.js 或 App.vue 里 @import 一次本文件
  *   2. 组件里直接用 var(--xxx)，例如 color: var(--text-secondary);
  *   3. 浏览器会根据系统 prefers-color-scheme 自动切换，无需 JS
- *
+ * 基于 variables 拼装出具体的主题外观 —— 按钮、卡片、表单、导航、暗色 / 亮色模式等组件级样式。它依赖 `_variables.scss` 里定义的变量，是 "设计语言的具体落地"。
  * 当前仅 AppleFooter 使用了本文件变量；其他组件如需深色模式，
  * 把硬编码颜色替换成对应变量即可，例如：
  *   #1d1d1f → var(--text-primary)
